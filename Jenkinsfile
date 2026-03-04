@@ -1,15 +1,15 @@
 pipeline {
     agent any
-    
-    tools {
-        maven 'Maven3'
-        jdk 'JDK17'
+
+    parameters {
+        string(name: 'BRANCH', defaultValue: 'master', description: 'Git Branch')
     }
 
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/shaikhshahbazz/spring3-mvc-maven-xml-hello-world-1.git'
+                git branch: "${params.BRANCH}",
+                url: 'https://github.com/shaikhshahbazz/spring3-mvc-maven-xml-hello-world-1.git'
             }
         }
 
@@ -17,21 +17,6 @@ pipeline {
             steps {
                 sh 'mvn clean package'
             }
-        }
-
-        stage('Test') {
-            steps {
-                sh 'mvn test'
-            }
-        }
-    }
-
-    post {
-        success {
-            echo 'Build Successful!'
-        }
-        failure {
-            echo 'Build Failed!'
         }
     }
 }
